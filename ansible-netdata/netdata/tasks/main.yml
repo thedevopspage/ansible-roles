@@ -1,0 +1,24 @@
+---
+# tasks file for netdata
+- name: Installing packages need for preparing the system.
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ netdata_ubuntu_packages }}"
+
+- name: Download the Netdata GitHub repo and put it in /usr/local/src/netdata
+  git:
+    repo: "{{ netdata_git_repo }}"
+    dest: "{{ netdata_dir }}"
+    depth: 1
+  become: true
+
+- name: Installing Netdata using the Netdata Installer
+  command: "{{ netdata_installer }} --dont-wait"
+  args:
+    chdir: "{{ netdata_dir }}"
+    creates: /usr/sbin/netdata
+  become: true
+  notify: restart netdata
+

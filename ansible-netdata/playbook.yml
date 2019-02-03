@@ -1,0 +1,8 @@
+# Playbook to install Netdata
+- hosts: netdata
+  user: deployar
+  #user: root
+  become: yes
+  gather_facts: yes
+  roles:
+    - {role: 'netdata', tags: 'netdata-install'}
